@@ -7,6 +7,7 @@ import { TracksFactory } from './tracks.factory';
 
 @Module({
   controllers: [TracksController],
+  exports: [TracksProvider],
   imports: [DatabaseModule],
   providers: [TracksFactory, TracksProcessor, TracksProvider],
 })

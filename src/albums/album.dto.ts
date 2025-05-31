@@ -5,6 +5,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+import { UUID } from '../common/uuid.type';
 
 export class AlbumDto {
   @IsNotEmpty()
@@ -17,5 +18,5 @@ export class AlbumDto {
 
   @IsOptional()
   @IsUUID('4')
-  public artistId: string | null;
+  public artistId: UUID | null;
 }

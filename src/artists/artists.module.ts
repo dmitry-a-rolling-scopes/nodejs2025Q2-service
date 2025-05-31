@@ -7,6 +7,7 @@ import { ArtistsProcessor } from './artists.processor';
 
 @Module({
   controllers: [ArtistsController],
+  exports: [ArtistsProvider],
   imports: [DatabaseModule],
   providers: [ArtistsFactory, ArtistsProcessor, ArtistsProvider],
 })

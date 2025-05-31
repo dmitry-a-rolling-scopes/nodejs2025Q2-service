@@ -20,7 +20,7 @@ export class UsersProcessor {
 
     await this.dataSource.addUser(user);
 
-    return this.dataSource.getUserDto(user.id);
+    return this.dataSource.getUserDto(user.id as UUID);
   }
 
   public async update(
@@ -45,7 +45,7 @@ export class UsersProcessor {
     user.updatedAt = Date.now();
     user.version++;
 
-    return this.dataSource.getUserDto(user.id);
+    return this.dataSource.getUserDto(user.id as UUID);
   }
 
   public async delete(id: UUID): Promise<void> {

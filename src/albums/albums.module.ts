@@ -7,6 +7,7 @@ import { AlbumsProcessor } from './albums.processor';
 
 @Module({
   controllers: [AlbumsController],
+  exports: [AlbumsProvider],
   imports: [DatabaseModule],
   providers: [AlbumsFactory, AlbumsProcessor, AlbumsProvider],
 })

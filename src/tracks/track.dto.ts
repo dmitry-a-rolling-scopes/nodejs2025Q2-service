@@ -5,6 +5,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+import { UUID } from '../common/uuid.type';
 
 export class TrackDto {
   @IsNotEmpty()
@@ -13,11 +14,11 @@ export class TrackDto {
 
   @IsOptional()
   @IsUUID('4')
-  artistId: string | null;
+  artistId: UUID | null;
 
   @IsOptional()
   @IsUUID('4')
-  albumId: string | null;
+  albumId: UUID | null;
 
   @IsNumber()
   duration: number;
