@@ -31,7 +31,7 @@ export class FavoritesProcessor {
       await this.dataSource.addAlbumToFavorites(album);
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new UnprocessableEntityException();
+        throw new UnprocessableEntityException('Not Found');
       }
 
       throw error;
@@ -51,7 +51,7 @@ export class FavoritesProcessor {
       await this.dataSource.addArtistToFavorites(artist);
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new UnprocessableEntityException();
+        throw new UnprocessableEntityException('Not Found');
       }
 
       throw error;
@@ -71,7 +71,7 @@ export class FavoritesProcessor {
       await this.dataSource.addTrackToFavorites(track);
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new UnprocessableEntityException();
+        throw new UnprocessableEntityException('Not Found');
       }
 
       throw error;

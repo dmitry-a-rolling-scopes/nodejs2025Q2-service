@@ -13,13 +13,22 @@ git clone {repository URL}
 
 ## Installing NPM modules
 
-```
+```bash
+
 npm install
+```
+
+## Configuration
+Create .env file (copy from .env.example):
+```bash
+
+cp .env.example .env
 ```
 
 ## Running application
 
-```
+```bash
+
 npm start
 ```
 
@@ -33,7 +42,8 @@ After application running open new terminal and enter:
 
 To run all tests without authorization
 
-```
+```bash
+
 npm run test
 ```
 
@@ -45,7 +55,8 @@ npm run test -- <path to suite>
 
 To run all test with authorization
 
-```
+```bash
+
 npm run test:auth
 ```
 
@@ -57,11 +68,13 @@ npm run test:auth -- <path to suite>
 
 ### Auto-fix and format
 
-```
+```bash
+
 npm run lint
 ```
 
-```
+```bash
+
 npm run format
 ```
 
