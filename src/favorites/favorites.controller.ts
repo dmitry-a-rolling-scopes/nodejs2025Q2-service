@@ -11,17 +11,21 @@ import { UUID } from '../common/uuid.dto';
 import { FavoritesProcessor } from './favorites.processor';
 import { FavoritesProvider } from './favorites.provider';
 import { FavoritesResponse } from './favorites.response.dto';
+import { FavoritesMapper } from './favorites.mapper';
 
 @Controller('favs')
 export class FavoritesController {
   constructor(
+    private readonly favoritesMapper: FavoritesMapper,
     private readonly favoritesProcessor: FavoritesProcessor,
     private readonly favoritesProvider: FavoritesProvider,
   ) {}
 
   @Get()
   public async getAll(): Promise<FavoritesResponse> {
-    return await this.favoritesProvider.getAll();
+    const favorites = await this.favoritesProvider.getAll();
+
+    return this.favoritesMapper.map(favorites);
   }
 
   @Delete('album/:id')

@@ -1,34 +1,34 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { UsersFactory } from './users.factory';
-import { DataSource } from '../database/database.data-source';
 import { UUID } from '../common/uuid.type';
 import { UsersProvider } from './users.provider';
 import { CreateUserDto } from './user.create.dto';
 import { UpdatePasswordDto } from './user.password.update.dto';
-import { UserDto } from './user.dto';
+import { User } from './user.entity';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersProcessor {
   constructor(
-    private readonly dataSource: DataSource,
     private readonly usersFactory: UsersFactory,
     private readonly usersProvider: UsersProvider,
+    private readonly usersRepository: UsersRepository,
   ) {}
 
-  public async create(createUserDto: CreateUserDto): Promise<UserDto> {
+  public async create(createUserDto: CreateUserDto): Promise<User> {
     const user = this.usersFactory.create(createUserDto);
 
-    await this.dataSource.addUser(user);
+    await this.usersRepository.save(user);
 
-    return this.dataSource.getUserDto(user.id as UUID);
+    return user;
   }
 
   public async update(
     id: UUID,
     updatePasswordDto: UpdatePasswordDto,
-  ): Promise<UserDto> {
-    const userDto = await this.usersProvider.get(id);
-    const user = await this.dataSource.getUser(userDto.id);
+  ): Promise<User> {
+    const user = await this.usersProvider.get(id);
+
     const currentPassword = user.password;
     const oldPassword = updatePasswordDto.oldPassword;
     const newPassword = updatePasswordDto.newPassword;
@@ -38,21 +38,22 @@ export class UsersProcessor {
     }
 
     if (oldPassword === newPassword) {
-      return userDto;
+      return user;
     }
 
     user.password = updatePasswordDto.newPassword;
-    user.updatedAt = Date.now();
     user.version++;
 
-    return this.dataSource.getUserDto(user.id as UUID);
+    await this.usersRepository.save(user);
+
+    return user;
   }
 
   public async delete(id: UUID): Promise<void> {
     await this.usersProvider.get(id);
 
-    const user = await this.dataSource.getUser(id);
+    const user = await this.usersProvider.get(id);
 
-    await this.dataSource.deleteUser(user);
+    await this.usersRepository.delete(user);
   }
 }

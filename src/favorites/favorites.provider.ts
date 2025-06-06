@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource } from '../database/database.data-source';
-import { FavoritesResponse } from './favorites.response.dto';
+import { FavoritesRepository } from './favorites.repository';
+import { Favorites } from './favorites.entity';
 
 @Injectable()
 export class FavoritesProvider {
-  constructor(private readonly dataSource: DataSource) {}
+  constructor(private readonly favoritesRepository: FavoritesRepository) {}
 
-  public async getAll(): Promise<FavoritesResponse> {
-    return await this.dataSource.getFavoritesResponseDto();
+  public async getAll(): Promise<Favorites> {
+    return await this.favoritesRepository.findOne();
   }
 }

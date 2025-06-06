@@ -1,18 +1,15 @@
-import { randomUUID } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
-import { User } from './user.interface';
 import { CreateUserDto } from './user.create.dto';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersFactory {
   public create(userDto: CreateUserDto): User {
-    return {
-      id: randomUUID(),
-      login: userDto.login,
-      password: userDto.password,
-      version: 1,
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
+    const user = new User();
+
+    user.login = userDto.login;
+    user.password = userDto.password;
+
+    return user;
   }
 }

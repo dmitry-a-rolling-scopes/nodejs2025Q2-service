@@ -1,33 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { TracksFactory } from './tracks.factory';
-import { DataSource } from '../database/database.data-source';
 import { UUID } from '../common/uuid.type';
 import { TracksProvider } from './tracks.provider';
-import { Track } from './track.interface';
+import { Track as TrackInterface } from './track.interface';
+import { Track } from './track.entity';
+import { TracksRepository } from './tracks.repository';
+import { AlbumsProvider } from '../albums/albums.provider';
+import { ArtistsProvider } from '../artists/artists.provider';
 
 @Injectable()
 export class TracksProcessor {
   constructor(
-    private readonly dataSource: DataSource,
+    private readonly albumsProvider: AlbumsProvider,
+    private readonly artistsProvider: ArtistsProvider,
     private readonly tracksFactory: TracksFactory,
     private readonly tracksProvider: TracksProvider,
+    private readonly tracksRepository: TracksRepository,
   ) {}
 
-  public async create(trackDto: Partial<Track>): Promise<Track> {
-    const track = this.tracksFactory.create(trackDto);
+  public async create(trackDto: Partial<TrackInterface>): Promise<Track> {
+    const track = await this.tracksFactory.create(trackDto);
 
-    await this.dataSource.addTrack(track);
+    await this.tracksRepository.save(track);
 
     return track;
   }
 
-  public async update(id: UUID, trackDto: Partial<Track>): Promise<Track> {
+  public async update(
+    id: UUID,
+    trackDto: Partial<TrackInterface>,
+  ): Promise<Track> {
     const track = await this.tracksProvider.get(id);
 
     track.name = trackDto.name;
-    track.artistId = trackDto.artistId;
-    track.albumId = trackDto.albumId;
+    track.artist = trackDto.artistId
+      ? await this.artistsProvider.get(trackDto.artistId as UUID)
+      : null;
+    track.album = trackDto.albumId
+      ? await this.albumsProvider.get(trackDto.albumId as UUID)
+      : null;
     track.duration = trackDto.duration;
+
+    await this.tracksRepository.save(track);
 
     return track;
   }
@@ -35,6 +49,6 @@ export class TracksProcessor {
   public async delete(id: UUID): Promise<void> {
     const track = await this.tracksProvider.get(id);
 
-    await this.dataSource.deleteTrack(track);
+    await this.tracksRepository.delete(track);
   }
 }

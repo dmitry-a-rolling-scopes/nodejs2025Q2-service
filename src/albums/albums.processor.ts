@@ -1,32 +1,42 @@
 import { Injectable } from '@nestjs/common';
-import { Album } from './album.interface';
+import { Album as AlbumInterface } from './album.interface';
 import { AlbumsFactory } from './albums.factory';
 import { AlbumsProvider } from './albums.provider';
-import { DataSource } from '../database/database.data-source';
 import { UUID } from '../common/uuid.type';
+import { AlbumsRepository } from './albums.repository';
+import { ArtistsProvider } from '../artists/artists.provider';
+import { Album } from './album.entity';
 
 @Injectable()
 export class AlbumsProcessor {
   constructor(
     private readonly albumsFactory: AlbumsFactory,
     private readonly albumsProvider: AlbumsProvider,
-    private readonly dataSource: DataSource,
+    private readonly albumsRepository: AlbumsRepository,
+    private readonly artistProvider: ArtistsProvider,
   ) {}
 
-  public async create(albumDto: Partial<Album>): Promise<Album> {
-    const album = this.albumsFactory.create(albumDto);
+  public async create(albumDto: Partial<AlbumInterface>): Promise<Album> {
+    const album = await this.albumsFactory.create(albumDto);
 
-    await this.dataSource.addAlbum(album);
+    await this.albumsRepository.save(album);
 
     return album;
   }
 
-  public async update(id: UUID, albumDto: Partial<Album>): Promise<Album> {
+  public async update(
+    id: UUID,
+    albumDto: Partial<AlbumInterface>,
+  ): Promise<Album> {
     const album = await this.albumsProvider.get(id);
 
     album.name = albumDto.name;
     album.year = albumDto.year;
-    album.artistId = albumDto.artistId;
+    album.artist = albumDto.artistId
+      ? await this.artistProvider.get(albumDto.artistId as UUID)
+      : null;
+
+    await this.albumsRepository.save(album);
 
     return album;
   }
@@ -34,6 +44,6 @@ export class AlbumsProcessor {
   public async delete(id: UUID): Promise<void> {
     const album = await this.albumsProvider.get(id);
 
-    await this.dataSource.deleteAlbum(album);
+    await this.albumsRepository.delete(album);
   }
 }
