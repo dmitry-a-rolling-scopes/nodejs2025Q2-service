@@ -12,7 +12,7 @@ export class AlbumsRepository {
   ) {}
 
   public async delete(album: Album): Promise<DeleteResult> {
-    return await this.albumsRepository.delete(album);
+    return await this.albumsRepository.delete(album.id);
   }
 
   public async find(): Promise<Album[]> {

@@ -22,7 +22,7 @@ export class FavoritesProcessor {
 
   public async deleteAlbum(id: UUID): Promise<void> {
     const album = await this.albumsProvider.get(id);
-    const favorites = await this.favoritesProvider.getAll();
+    const favorites = await this.favoritesProvider.getOrCreate();
 
     favorites.deleteAlbum(album);
 
@@ -32,7 +32,7 @@ export class FavoritesProcessor {
   public async postAlbum(id: UUID): Promise<void> {
     try {
       const album = await this.albumsProvider.get(id);
-      const favorites = await this.favoritesProvider.getAll();
+      const favorites = await this.favoritesProvider.getOrCreate();
 
       favorites.addAlbum(album);
 
@@ -48,7 +48,7 @@ export class FavoritesProcessor {
 
   public async deleteArtist(id: UUID): Promise<void> {
     const artist = await this.artistsProvider.get(id);
-    const favorites = await this.favoritesProvider.getAll();
+    const favorites = await this.favoritesProvider.getOrCreate();
 
     favorites.deleteArtist(artist);
 
@@ -58,7 +58,7 @@ export class FavoritesProcessor {
   public async postArtist(id: UUID): Promise<void> {
     try {
       const artist = await this.artistsProvider.get(id);
-      const favorites = await this.favoritesProvider.getAll();
+      const favorites = await this.favoritesProvider.getOrCreate();
 
       favorites.addArtist(artist);
 
@@ -74,7 +74,7 @@ export class FavoritesProcessor {
 
   public async deleteTrack(id: UUID): Promise<void> {
     const track = await this.tracksProvider.get(id);
-    const favorites = await this.favoritesProvider.getAll();
+    const favorites = await this.favoritesProvider.getOrCreate();
 
     favorites.deleteTrack(track);
 
@@ -84,7 +84,7 @@ export class FavoritesProcessor {
   public async postTrack(id: UUID): Promise<void> {
     try {
       const track = await this.tracksProvider.get(id);
-      const favorites = await this.favoritesProvider.getAll();
+      const favorites = await this.favoritesProvider.getOrCreate();
 
       favorites.addTrack(track);
 

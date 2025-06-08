@@ -12,7 +12,7 @@ export class UsersRepository {
   ) {}
 
   public async delete(user: User): Promise<DeleteResult> {
-    return await this.usersRepository.delete(user);
+    return await this.usersRepository.delete(user.id);
   }
 
   public async find(): Promise<User[]> {

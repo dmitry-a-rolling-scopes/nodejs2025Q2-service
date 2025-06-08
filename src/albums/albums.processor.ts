@@ -6,6 +6,7 @@ import { UUID } from '../common/uuid.type';
 import { AlbumsRepository } from './albums.repository';
 import { ArtistsProvider } from '../artists/artists.provider';
 import { Album } from './album.entity';
+import { FavoritesProcessor } from '../favorites/favorites.processor';
 
 @Injectable()
 export class AlbumsProcessor {
@@ -14,6 +15,7 @@ export class AlbumsProcessor {
     private readonly albumsProvider: AlbumsProvider,
     private readonly albumsRepository: AlbumsRepository,
     private readonly artistProvider: ArtistsProvider,
+    private readonly favoritesProcessor: FavoritesProcessor,
   ) {}
 
   public async create(albumDto: Partial<AlbumInterface>): Promise<Album> {
@@ -44,6 +46,7 @@ export class AlbumsProcessor {
   public async delete(id: UUID): Promise<void> {
     const album = await this.albumsProvider.get(id);
 
+    await this.favoritesProcessor.deleteAlbum(id);
     await this.albumsRepository.delete(album);
   }
 }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AlbumsController } from './albums.controller';
 import { AlbumsProvider } from './albums.provider';
 import { AlbumsFactory } from './albums.factory';
@@ -8,11 +8,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Album } from './album.entity';
 import { AlbumsMapper } from './albums.mapper';
 import { ArtistsModule } from '../artists/artists.module';
+import { FavoritesModule } from '../favorites/favorites.module';
 
 @Module({
   controllers: [AlbumsController],
-  exports: [AlbumsProvider],
-  imports: [ArtistsModule, TypeOrmModule.forFeature([Album])],
+  exports: [AlbumsMapper, AlbumsProvider],
+  imports: [
+    forwardRef(() => ArtistsModule),
+    forwardRef(() => FavoritesModule),
+    TypeOrmModule.forFeature([Album]),
+  ],
   providers: [
     AlbumsFactory,
     AlbumsMapper,

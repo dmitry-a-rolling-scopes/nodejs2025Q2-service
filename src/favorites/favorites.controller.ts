@@ -23,7 +23,7 @@ export class FavoritesController {
 
   @Get()
   public async getAll(): Promise<FavoritesResponse> {
-    const favorites = await this.favoritesProvider.getAll();
+    const favorites = await this.favoritesProvider.getOrCreate();
 
     return this.favoritesMapper.map(favorites);
   }

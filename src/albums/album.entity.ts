@@ -28,6 +28,6 @@ export class Album {
   public year: number;
 
   @IsOptional()
-  @ManyToOne((): typeof Artist => Artist, { onDelete: 'SET NULL' })
-  artist: Artist | null = null;
+  @ManyToOne((): typeof Artist => Artist, { eager: true, onDelete: 'SET NULL' })
+  public artist: Artist | null;
 }

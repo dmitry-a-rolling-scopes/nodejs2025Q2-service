@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Favorites } from './favorites.entity';
 
@@ -11,7 +11,11 @@ export class FavoritesRepository {
   ) {}
 
   public async findOne(): Promise<Favorites | null> {
-    return await this.favoritesRepository.findOne({});
+    return await this.favoritesRepository.findOne({
+      where: {
+        id: Not(IsNull()),
+      },
+    });
   }
 
   public async save(favorites: Favorites): Promise<Favorites> {

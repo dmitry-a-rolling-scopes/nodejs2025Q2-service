@@ -7,12 +7,14 @@ import { Track } from './track.entity';
 import { TracksRepository } from './tracks.repository';
 import { AlbumsProvider } from '../albums/albums.provider';
 import { ArtistsProvider } from '../artists/artists.provider';
+import { FavoritesProcessor } from '../favorites/favorites.processor';
 
 @Injectable()
 export class TracksProcessor {
   constructor(
     private readonly albumsProvider: AlbumsProvider,
     private readonly artistsProvider: ArtistsProvider,
+    private readonly favoritesProcessor: FavoritesProcessor,
     private readonly tracksFactory: TracksFactory,
     private readonly tracksProvider: TracksProvider,
     private readonly tracksRepository: TracksRepository,
@@ -49,6 +51,7 @@ export class TracksProcessor {
   public async delete(id: UUID): Promise<void> {
     const track = await this.tracksProvider.get(id);
 
+    await this.favoritesProcessor.deleteTrack(id);
     await this.tracksRepository.delete(track);
   }
 }

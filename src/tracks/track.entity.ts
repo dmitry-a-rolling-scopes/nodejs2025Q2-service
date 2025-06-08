@@ -23,14 +23,14 @@ export class Track {
   @IsString()
   public name: string;
 
-  @ManyToOne((): typeof Artist => Artist, { onDelete: 'SET NULL' })
-  artist: Artist | null = null;
+  @ManyToOne((): typeof Artist => Artist, { eager: true, onDelete: 'SET NULL' })
+  public artist: Artist | null;
 
   @IsOptional()
-  @ManyToOne((): typeof Album => Album, { onDelete: 'SET NULL' })
-  album: Album | null = null;
+  @ManyToOne((): typeof Album => Album, { eager: true, onDelete: 'SET NULL' })
+  public album: Album | null;
 
   @Column({ nullable: false })
   @IsNumber()
-  duration: number;
+  public duration: number;
 }

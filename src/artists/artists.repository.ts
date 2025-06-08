@@ -12,7 +12,7 @@ export class ArtistsRepository {
   ) {}
 
   public async delete(artist: Artist): Promise<DeleteResult> {
-    return await this.artistsRepository.delete(artist);
+    return await this.artistsRepository.delete(artist.id);
   }
 
   public async find(): Promise<Artist[]> {
