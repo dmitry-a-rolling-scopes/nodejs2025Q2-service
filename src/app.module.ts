@@ -28,7 +28,7 @@ import { User } from './users/user.entity';
       port: +process.env.POSTGRES_PORT,
       username: process.env.POSTGRES_USERNAME,
       password: process.env.POSTGRES_PASSWORD,
-      database: process.env.POSTGRES_NAME,
+      database: process.env.POSTGRES_DB,
       entities: [Album, Artist, Favorites, Track, User],
       synchronize: true,
     }),
