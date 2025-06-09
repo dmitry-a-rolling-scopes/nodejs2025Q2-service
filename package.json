@@ -14,6 +14,8 @@
     "audit:fix:force": "npm audit fix --force",
     "docker:up": "docker compose up --detach --wait",
     "docker:down": "docker compose down",
+    "docker:scout:cves:service": "docker scout cves dmitryarollingscopes/nodejs2025q2-service:dev",
+    "docker:scout:cves:postgres": "docker scout cves dmitryarollingscopes/nodejs2025q2-postgres:dev",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

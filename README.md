@@ -73,10 +73,20 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 docker scout cves dmitryarollingscopes/nodejs2025q2-service:dev
 ```
+or
+```bash
+
+npm run docker:scout:cves:service
+```
 
 ```bash
 
 docker scout cves dmitryarollingscopes/nodejs2025q2-postgres:dev
+```
+or
+```bash
+
+npm run docker:scout:cves:postgres
 ```
 
 ```bash
