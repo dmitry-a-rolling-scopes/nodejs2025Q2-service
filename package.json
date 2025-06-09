@@ -12,6 +12,8 @@
     "audit": "npm audit",
     "audit:fix": "npm audit fix",
     "audit:fix:force": "npm audit fix --force",
+    "docker:up": "docker compose up --detach --wait",
+    "docker:down": "docker compose down",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -25,7 +27,9 @@
     "test:refresh": "cross-env TEST_MODE=auth jest --testPathPattern refresh.e2e.spec.ts --noStackTrace --runInBand",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "typeorm:migration:generate": "npx typeorm-ts-node-commonjs migration:generate migrations/Migration --dataSource=src/type-orm.data-source.ts",
+    "typeorm:migration:run": "npx typeorm-ts-node-commonjs migration:run --dataSource=src/type-orm.data-source.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.3",

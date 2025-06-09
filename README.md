@@ -40,6 +40,12 @@ or
 npm run docker:up
 ```
 
+### Run migrations:
+```bash
+
+docker compose exec node npm run typeorm:migration:run
+```
+
 ### Down
 ```bash
 
