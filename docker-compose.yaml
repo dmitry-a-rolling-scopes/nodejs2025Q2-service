@@ -1,7 +1,9 @@
 services:
     node:
-        image: dmitryarollingscopes/nodejs2025q2-service:dev
+        image: dmitryarollingscopes/nodejs2025q2-service:release
         environment:
+            LOG_FILE_SIZE: ${LOG_FILE_SIZE}
+            LOG_LEVEL: ${LOG_LEVEL}
             PORT: ${PORT}
             POSTGRES_HOST: ${POSTGRES_HOST}
             POSTGRES_PORT: ${POSTGRES_PORT}
@@ -16,6 +18,7 @@ services:
         depends_on:
             - postgres
         volumes:
+            - ./logs:/srv/app/logs
             - ./src:/srv/app/src
 
     postgres:

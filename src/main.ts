@@ -4,6 +4,8 @@ import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { SwaggerModule } from '@nestjs/swagger';
 import { readFile } from 'node:fs/promises';
 import { parse } from 'yaml';
+import { LoggingInterceptor } from './logs/logs.interceptor';
+import { LoggingService } from './logs/logs.logging.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,7 +15,11 @@ async function bootstrap() {
     swaggerOptions: { spec: parse(await readFile('doc/api.yaml', 'utf8')) },
   });
 
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+  app.useGlobalInterceptors(
+    new ClassSerializerInterceptor(app.get(Reflector)),
+    new LoggingInterceptor(app.get(LoggingService)),
+  );
+
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   await app.listen(port, (): void => {

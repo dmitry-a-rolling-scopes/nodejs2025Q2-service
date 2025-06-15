@@ -71,7 +71,7 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 ## Scanning
 ```bash
 
-docker scout cves dmitryarollingscopes/nodejs2025q2-service:dev
+docker scout cves dmitryarollingscopes/nodejs2025q2-service:release
 ```
 or
 ```bash
@@ -122,6 +122,13 @@ To run only specific test suite with authorization
 
 ```
 npm run test:auth -- <path to suite>
+```
+
+## Clean logs
+
+```bash
+
+npm run docker:logs:clean
 ```
 
 ### Auto-fix and format

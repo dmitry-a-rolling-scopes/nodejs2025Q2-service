@@ -9,13 +9,15 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmModuleOptions } from './type-orm.module-options';
+import { LogsModule } from './logs/logs.module';
 
 @Module({
   imports: [
     AlbumsModule,
     ArtistsModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     FavoritesModule,
+    LogsModule,
     TracksModule,
     TypeOrmModule.forRoot(typeOrmModuleOptions),
     UsersModule,
