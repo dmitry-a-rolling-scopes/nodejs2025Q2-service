@@ -10,11 +10,13 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmModuleOptions } from './type-orm.module-options';
 import { LogsModule } from './logs/logs.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     AlbumsModule,
     ArtistsModule,
+    AuthModule,
     ConfigModule.forRoot({ isGlobal: true }),
     FavoritesModule,
     LogsModule,

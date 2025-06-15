@@ -6,17 +6,19 @@ import { CreateUserDto } from './user.create.dto';
 import { UpdatePasswordDto } from './user.password.update.dto';
 import { User } from './user.entity';
 import { UsersRepository } from './users.repository';
+import { UsersPasswordHasher } from './users.password.hasher';
 
 @Injectable()
 export class UsersProcessor {
   constructor(
+    private readonly passwordHasher: UsersPasswordHasher,
     private readonly usersFactory: UsersFactory,
     private readonly usersProvider: UsersProvider,
     private readonly usersRepository: UsersRepository,
   ) {}
 
   public async create(createUserDto: CreateUserDto): Promise<User> {
-    const user = this.usersFactory.create(createUserDto);
+    const user = await this.usersFactory.create(createUserDto);
 
     await this.usersRepository.save(user);
 
@@ -28,22 +30,18 @@ export class UsersProcessor {
     updatePasswordDto: UpdatePasswordDto,
   ): Promise<User> {
     const user = await this.usersProvider.get(id);
+    const passwordValid = await user.isPasswordValid(
+      updatePasswordDto.oldPassword,
+    );
 
-    const currentPassword = user.password;
-    const oldPassword = updatePasswordDto.oldPassword;
-    const newPassword = updatePasswordDto.newPassword;
-
-    if (oldPassword !== currentPassword) {
+    if (!passwordValid) {
       throw new ForbiddenException();
-    }
-
-    if (oldPassword === newPassword) {
-      return user;
     }
 
     user.password = updatePasswordDto.newPassword;
     user.version++;
 
+    await this.passwordHasher.hash(user);
     await this.usersRepository.save(user);
 
     return user;

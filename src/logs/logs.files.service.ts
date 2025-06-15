@@ -28,8 +28,6 @@ export class LogsFilesService {
   }
 
   public async write(message: any, ...optionalParams: any[]): Promise<void> {
-    console.log(message, ...optionalParams);
-
     await this.create();
     await this.rotate();
 

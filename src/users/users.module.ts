@@ -7,6 +7,7 @@ import { UsersRepository } from './users.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UsersMapper } from './users.mapper';
+import { UsersPasswordHasher } from './users.password.hasher';
 
 @Module({
   controllers: [UsersController],
@@ -14,9 +15,11 @@ import { UsersMapper } from './users.mapper';
   providers: [
     UsersFactory,
     UsersMapper,
+    UsersPasswordHasher,
     UsersProcessor,
     UsersProvider,
     UsersRepository,
   ],
+  exports: [UsersMapper, UsersProcessor, UsersProvider],
 })
 export class UsersModule {}

@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersProvider } from './users.provider';
 import { UUID } from '../common/uuid.dto';
@@ -17,8 +18,10 @@ import { CreateUserDto } from './user.create.dto';
 import { UpdatePasswordDto } from './user.password.update.dto';
 import { UsersMapper } from './users.mapper';
 import { User } from './user.entity';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('user')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(
     private readonly usersMapper: UsersMapper,

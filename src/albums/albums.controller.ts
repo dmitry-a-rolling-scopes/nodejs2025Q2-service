@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AlbumsProvider } from './albums.provider';
 import { Album as AlbumInterface } from './album.interface';
@@ -16,8 +17,10 @@ import { UUID } from '../common/uuid.dto';
 import { AlbumDto } from './album.dto';
 import { AlbumsMapper } from './albums.mapper';
 import { Album } from './album.entity';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('album')
+@UseGuards(AuthGuard)
 export class AlbumsController {
   constructor(
     private readonly albumsMapper: AlbumsMapper,

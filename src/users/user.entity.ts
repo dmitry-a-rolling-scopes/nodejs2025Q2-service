@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { randomUUID } from 'node:crypto';
+import * as bcrypt from 'bcrypt';
 
 @Entity()
 export class User {
@@ -42,4 +43,12 @@ export class User {
   @IsNotEmpty()
   @IsNumber()
   public updatedAt: Date;
+
+  public async hashPassword(rounds: number): Promise<void> {
+    this.password = await bcrypt.hash(this.password, +rounds);
+  }
+
+  public async isPasswordValid(password: string): Promise<boolean> {
+    return await bcrypt.compare(password, this.password);
+  }
 }

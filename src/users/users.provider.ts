@@ -20,4 +20,14 @@ export class UsersProvider {
 
     return user;
   }
+
+  public async getByLogin(login: string): Promise<User> {
+    const user = await this.usersRepository.findOneByLogin(login);
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
+  }
 }

@@ -23,6 +23,10 @@ export class UsersRepository {
     return await this.usersRepository.findOne({ where: { id: id } });
   }
 
+  public async findOneByLogin(login: string): Promise<User | null> {
+    return await this.usersRepository.findOne({ where: { login: login } });
+  }
+
   public async save(user: User): Promise<User> {
     return await this.usersRepository.save(user);
   }
