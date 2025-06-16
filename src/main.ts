@@ -10,6 +10,15 @@ import { LoggingService } from './logs/logs.logging.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const port = process.env.PORT || 4000;
+  const loggingService = app.get(LoggingService);
+
+  process.on('uncaughtException', async (error: Error): Promise<void> => {
+    await loggingService.fatal('Uncaught Exception', error.message);
+  });
+
+  process.on('unhandledRejection', async (reason: any): Promise<void> => {
+    await loggingService.fatal('Unhandled Rejection', reason);
+  });
 
   SwaggerModule.setup('doc', app, null, {
     swaggerOptions: { spec: parse(await readFile('doc/api.yaml', 'utf8')) },

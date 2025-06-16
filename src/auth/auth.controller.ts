@@ -32,9 +32,7 @@ export class AuthController {
   }
 
   @Post('refresh')
-  public async refresh(@Body() refreshDto: RefreshDto): Promise<void> {
-    console.log(refreshDto);
-
-    return;
+  public async refresh(@Body() refreshDto: RefreshDto): Promise<LoginResponse> {
+    return await this.authProcessor.refresh(refreshDto);
   }
 }

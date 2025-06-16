@@ -1,44 +1,76 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UsersProvider } from '../users/users.provider';
 import { LoginDto } from './auth.login.dto';
 import { LoginResponse } from './auth.login.response.dto';
+import { RefreshDto } from './auth.refresh.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { Token } from './auth.token.interface';
+import { LoginResponseFactory } from './login.response.factory';
+import { User } from '../users/user.entity';
 
 @Injectable()
 export class AuthProcessor {
   constructor(
-    private jwtService: JwtService,
-    private usersProvider: UsersProvider,
+    private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
+    private readonly loginResponseFactory: LoginResponseFactory,
+    private readonly usersProvider: UsersProvider,
   ) {}
 
-  async login(loginDto: LoginDto): Promise<LoginResponse> {
+  public async login(loginDto: LoginDto): Promise<LoginResponse> {
+    let user: User;
+
     try {
+      user = await this.usersProvider.getByLogin(loginDto.login);
     } catch (error: unknown) {
-      if (error instanceof UnauthorizedException) {
+      if (error instanceof NotFoundException) {
         throw new UnauthorizedException();
       }
 
       throw error;
     }
 
-    const user = await this.usersProvider.getByLogin(loginDto.login);
     const passwordValid = await user.isPasswordValid(loginDto.password);
 
     if (!passwordValid) {
       throw new UnauthorizedException();
     }
 
-    const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
-      userId: user.id,
-      login: user.login,
-    });
+    return await this.loginResponseFactory.create(user);
+  }
 
-    const loginResponse = new LoginResponse();
+  public async refresh(refreshDto: RefreshDto): Promise<LoginResponse> {
+    let refreshToken: Token;
+    let user: User;
 
-    loginResponse.accessToken = accessToken;
-    loginResponse.refreshToken = 'xxx'; // todo: rework;
+    try {
+      refreshToken = await this.jwtService.verifyAsync<Token>(
+        refreshDto.refreshToken,
+        {
+          secret: this.configService.getOrThrow<string>(
+            'JWT_SECRET_REFRESH_KEY',
+          ),
+        },
+      );
+    } catch {
+      throw new UnauthorizedException();
+    }
 
-    return loginResponse;
+    try {
+      user = await this.usersProvider.get(refreshToken.userId);
+    } catch (error: unknown) {
+      if (error instanceof NotFoundException) {
+        throw new UnauthorizedException();
+      }
+
+      throw error;
+    }
+
+    return await this.loginResponseFactory.create(user);
   }
 }

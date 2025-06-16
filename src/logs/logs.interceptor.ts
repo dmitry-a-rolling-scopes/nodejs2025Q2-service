@@ -15,12 +15,19 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest<Request>();
     const response = context.switchToHttp().getResponse<Response>();
-    const { method, url } = request;
+    const { method, url, query, body } = request;
     const status = response.statusCode;
 
     return next.handle().pipe(
       tap(async (response): Promise<void> => {
-        await this.loggingService.log(method, url, status, response);
+        await this.loggingService.log(
+          method,
+          url,
+          query,
+          body,
+          status,
+          response,
+        );
       }),
     );
   }

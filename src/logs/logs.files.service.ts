@@ -33,8 +33,7 @@ export class LogsFilesService {
 
     const log = this.logsFactory.create(message, ...optionalParams);
 
-    await fs.appendFile(this.logsFilePath, JSON.stringify(log));
-    await fs.appendFile(this.logsFilePath, os.EOL);
+    await fs.appendFile(this.logsFilePath, JSON.stringify(log) + os.EOL);
   }
 
   private async create(): Promise<void> {

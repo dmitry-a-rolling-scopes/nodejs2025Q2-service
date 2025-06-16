@@ -16,23 +16,23 @@ export class LoggingExceptionFilter implements ExceptionFilterInterface {
   async catch(exception: Error, host: ArgumentsHost): Promise<void> {
     const request = host.switchToHttp().getRequest<Request>();
     const response = host.switchToHttp().getResponse<Response>();
-    const { method, url } = request;
+    const { method, url, query, body } = request;
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
-    let body: string | object = {
+    let message: string | object = {
       message: getReasonPhrase(HttpStatus.INTERNAL_SERVER_ERROR),
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
     };
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
-      body = exception.getResponse();
+      message = exception.getResponse();
     }
 
-    body = typeof body === 'string' ? { message: body } : body;
+    message = typeof message === 'string' ? { message } : message;
 
-    await this.loggingService.log(method, url, status, body);
+    await this.loggingService.error(method, url, query, body, status);
 
-    response.status(status).json(body);
+    response.status(status).json(message);
   }
 }

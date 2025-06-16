@@ -5,6 +5,9 @@ import { AuthProcessor } from './auth.processor';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from './auth.guard';
+import { AccessTokenGenerator } from './auth.access-token.generator';
+import { RefreshTokenGenerator } from './auth.refresh-token.generator';
+import { LoginResponseFactory } from './login.response.factory';
 
 @Module({
   controllers: [AuthController],
@@ -21,6 +24,12 @@ import { AuthGuard } from './auth.guard';
     }),
     UsersModule,
   ],
-  providers: [AuthGuard, AuthProcessor],
+  providers: [
+    AccessTokenGenerator,
+    AuthGuard,
+    AuthProcessor,
+    LoginResponseFactory,
+    RefreshTokenGenerator,
+  ],
 })
 export class AuthModule {}

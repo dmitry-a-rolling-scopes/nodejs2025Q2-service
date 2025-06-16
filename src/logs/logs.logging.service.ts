@@ -19,7 +19,7 @@ export class LoggingService implements LoggerService {
       return;
     }
 
-    await this.logsFilesService.write(message, ...optionalParams);
+    await this.logsFilesService.write('log', message, ...optionalParams);
   }
 
   public async error(message: any, ...optionalParams: any[]): Promise<any> {
@@ -27,7 +27,7 @@ export class LoggingService implements LoggerService {
       return;
     }
 
-    await this.logsFilesService.write(message, ...optionalParams);
+    await this.logsFilesService.write('error', message, ...optionalParams);
   }
 
   public async warn(message: any, ...optionalParams: any[]): Promise<any> {
@@ -35,7 +35,7 @@ export class LoggingService implements LoggerService {
       return;
     }
 
-    await this.logsFilesService.write(message, ...optionalParams);
+    await this.logsFilesService.write('warn', message, ...optionalParams);
   }
 
   public async debug?(message: any, ...optionalParams: any[]): Promise<any> {
@@ -43,7 +43,7 @@ export class LoggingService implements LoggerService {
       return;
     }
 
-    await this.logsFilesService.write(message, ...optionalParams);
+    await this.logsFilesService.write('debug', message, ...optionalParams);
   }
 
   public async verbose?(message: any, ...optionalParams: any[]): Promise<any> {
@@ -51,7 +51,7 @@ export class LoggingService implements LoggerService {
       return;
     }
 
-    await this.logsFilesService.write(message, ...optionalParams);
+    await this.logsFilesService.write('verbose', message, ...optionalParams);
   }
 
   public async fatal?(message: any, ...optionalParams: any[]): Promise<any> {
@@ -59,7 +59,7 @@ export class LoggingService implements LoggerService {
       return;
     }
 
-    await this.logsFilesService.write(message, ...optionalParams);
+    await this.logsFilesService.write('fatal', message, ...optionalParams);
   }
 
   public setLogLevels?(levels: LogLevel[]): any {
