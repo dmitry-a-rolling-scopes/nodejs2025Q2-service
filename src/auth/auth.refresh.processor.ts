@@ -4,7 +4,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersProvider } from '../users/users.provider';
-import { LoginDto } from './auth.login.dto';
 import { LoginResponse } from './auth.login.response.dto';
 import { RefreshDto } from './auth.refresh.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -14,7 +13,7 @@ import { LoginResponseFactory } from './login.response.factory';
 import { User } from '../users/user.entity';
 
 @Injectable()
-export class AuthProcessor {
+export class RefreshProcessor {
   constructor(
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
@@ -22,29 +21,7 @@ export class AuthProcessor {
     private readonly usersProvider: UsersProvider,
   ) {}
 
-  public async login(loginDto: LoginDto): Promise<LoginResponse> {
-    let user: User;
-
-    try {
-      user = await this.usersProvider.getByLogin(loginDto.login);
-    } catch (error: unknown) {
-      if (error instanceof NotFoundException) {
-        throw new UnauthorizedException();
-      }
-
-      throw error;
-    }
-
-    const passwordValid = await user.isPasswordValid(loginDto.password);
-
-    if (!passwordValid) {
-      throw new UnauthorizedException();
-    }
-
-    return await this.loginResponseFactory.create(user);
-  }
-
-  public async refresh(refreshDto: RefreshDto): Promise<LoginResponse> {
+  public async process(refreshDto: RefreshDto): Promise<LoginResponse> {
     let refreshToken: Token;
     let user: User;
 

@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
-import { AuthProcessor } from './auth.processor';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { AuthGuard } from './auth.guard';
 import { AccessTokenGenerator } from './auth.access-token.generator';
 import { RefreshTokenGenerator } from './auth.refresh-token.generator';
 import { LoginResponseFactory } from './login.response.factory';
+import { LoginProcessor } from './auth.login.processor';
+import { RefreshProcessor } from './auth.refresh.processor';
 
 @Module({
   controllers: [AuthController],
@@ -27,8 +28,9 @@ import { LoginResponseFactory } from './login.response.factory';
   providers: [
     AccessTokenGenerator,
     AuthGuard,
-    AuthProcessor,
+    LoginProcessor,
     LoginResponseFactory,
+    RefreshProcessor,
     RefreshTokenGenerator,
   ],
 })

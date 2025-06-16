@@ -5,13 +5,15 @@ import { UsersProcessor } from '../users/users.processor';
 import { SignupDto } from './auth.signup.dto';
 import { LoginDto } from './auth.login.dto';
 import { RefreshDto } from './auth.refresh.dto';
-import { AuthProcessor } from './auth.processor';
 import { LoginResponse } from './auth.login.response.dto';
+import { LoginProcessor } from './auth.login.processor';
+import { RefreshProcessor } from './auth.refresh.processor';
 
 @Controller('auth')
 export class AuthController {
   constructor(
-    private readonly authProcessor: AuthProcessor,
+    private readonly loginProcessor: LoginProcessor,
+    private readonly refreshProcessor: RefreshProcessor,
     private readonly usersMapper: UsersMapper,
     private readonly usersProcessor: UsersProcessor,
   ) {}
@@ -28,11 +30,11 @@ export class AuthController {
 
   @Post('login')
   public async login(@Body() loginDto: LoginDto): Promise<LoginResponse> {
-    return await this.authProcessor.login(loginDto);
+    return await this.loginProcessor.process(loginDto);
   }
 
   @Post('refresh')
   public async refresh(@Body() refreshDto: RefreshDto): Promise<LoginResponse> {
-    return await this.authProcessor.refresh(refreshDto);
+    return await this.refreshProcessor.process(refreshDto);
   }
 }
