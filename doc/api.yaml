@@ -119,8 +119,13 @@ components:
             error: Bad Request
             message:
               - value must be a UUID
-    UnauthorizedError:
+    401:
       description: Access token is missing or invalid
+      content:
+        application/json:
+          example:
+            statusCode: 401
+            message: Unauthorized
     404:
       description: Not Found
       content:
@@ -234,7 +239,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
     post:
       tags:
         - Users
@@ -277,7 +282,7 @@ paths:
                   - password must be a string
                   - password should not be empty
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
   /user/{id}:
     parameters:
       - name: id
@@ -301,7 +306,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
 
@@ -354,7 +359,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         403:
           description: Forbidden
           content:
@@ -376,7 +381,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /track:
@@ -395,7 +400,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Track'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
     post:
       tags:
         - Track
@@ -441,7 +446,7 @@ paths:
                   - name should not be empty
                   - duration must be a number conforming to the specified constraints
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
   /track/{id}:
     parameters:
       - name: id
@@ -465,7 +470,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     put:
@@ -529,7 +534,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     delete:
@@ -543,7 +548,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /album:
@@ -562,7 +567,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Album'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
     post:
       tags:
         - Album
@@ -607,7 +612,7 @@ paths:
                   - year must be a number conforming to the specified constraints
                   - year should not be empty
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
   /album/{id}:
     parameters:
       - name: id
@@ -631,7 +636,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     put:
@@ -668,7 +673,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     delete:
@@ -682,7 +687,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /artist:
@@ -701,7 +706,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Artist'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
     post:
       tags:
         - Artist
@@ -741,7 +746,7 @@ paths:
                   - grammy must be a boolean value
                   - grammy should not be empty
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
   /artist/{id}:
     parameters:
       - name: id
@@ -765,7 +770,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     put:
@@ -797,7 +802,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     delete:
@@ -811,7 +816,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /favs:
@@ -828,7 +833,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Favorites'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
   /favs/track/{id}:
     parameters:
       - name: id
@@ -848,7 +853,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         422:
           $ref: '#/components/responses/422'
     delete:
@@ -862,7 +867,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /favs/album/{id}:
@@ -884,7 +889,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         422:
           $ref: '#/components/responses/422'
     delete:
@@ -898,7 +903,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /favs/artist/{id}:
@@ -920,7 +925,7 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         422:
           $ref: '#/components/responses/422'
     delete:
@@ -934,6 +939,6 @@ paths:
         400:
           $ref: '#/components/responses/400'
         401:
-          $ref: '#/components/responses/UnauthorizedError'
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
