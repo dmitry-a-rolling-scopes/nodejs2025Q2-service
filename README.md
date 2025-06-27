@@ -4,11 +4,14 @@
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+- [Docker Engine](https://docs.docker.com/engine/install/) or [Docker Desktop](https://docs.docker.com/desktop/).
+- [Docker Scout](https://docs.docker.com/scout/install/).
 
 ## Downloading
 
-```
-git clone {repository URL}
+```bash
+
+git clone https://github.com/dmitry-a-rolling-scopes/nodejs2025Q2-service.git
 ```
 
 ## Installing NPM modules
@@ -25,16 +28,71 @@ Create .env file (copy from .env.example):
 cp .env.example .env
 ```
 
+## Docker
+### Up
+```bash
+
+docker compose up --detach --wait
+```
+or
+```bash
+
+npm run docker:up
+```
+
+### Run migrations:
+```bash
+
+docker compose exec node npm run typeorm:migration:run
+```
+
+### Down
+```bash
+
+docker compose down
+```
+or
+```bash
+
+npm run docker:down
+```
+
 ## Running application
 
 ```bash
 
-npm start
+npm run start
 ```
 
 After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+## Scanning
+```bash
+
+docker scout cves dmitryarollingscopes/nodejs2025q2-service:release
+```
+or
+```bash
+
+npm run docker:scout:cves:service
+```
+
+```bash
+
+docker scout cves dmitryarollingscopes/nodejs2025q2-postgres:dev
+```
+or
+```bash
+
+npm run docker:scout:cves:postgres
+```
+
+```bash
+
+npm run audit
+```
 
 ## Testing
 
@@ -64,6 +122,13 @@ To run only specific test suite with authorization
 
 ```
 npm run test:auth -- <path to suite>
+```
+
+## Clean logs
+
+```bash
+
+npm run docker:logs:clean
 ```
 
 ### Auto-fix and format

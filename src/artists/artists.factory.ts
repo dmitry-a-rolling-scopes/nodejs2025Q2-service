@@ -1,14 +1,15 @@
-import { randomUUID } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
-import { Artist } from './artist.interface';
+import { Artist as ArtistInterface } from './artist.interface';
+import { Artist } from './artist.entity';
 
 @Injectable()
 export class ArtistsFactory {
-  public create(artistDto: Partial<Artist>): Artist {
-    return {
-      id: randomUUID(),
-      name: artistDto.name,
-      grammy: artistDto.grammy,
-    };
+  public create(artistDto: Partial<ArtistInterface>): Artist {
+    const artist = new Artist();
+
+    artist.name = artistDto.name;
+    artist.grammy = artistDto.grammy;
+
+    return artist;
   }
 }

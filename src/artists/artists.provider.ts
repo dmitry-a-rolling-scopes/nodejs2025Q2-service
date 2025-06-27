@@ -1,18 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Artist } from './artist.interface';
-import { DataSource } from '../database/database.data-source';
 import { UUID } from '../common/uuid.type';
+import { ArtistsRepository } from './artists.repository';
+import { Artist } from './artist.entity';
 
 @Injectable()
 export class ArtistsProvider {
-  constructor(private dataSource: DataSource) {}
+  constructor(private readonly artistsRepository: ArtistsRepository) {}
 
   public async getAll(): Promise<Artist[]> {
-    return await this.dataSource.getArtists();
+    return await this.artistsRepository.find();
   }
 
   public async get(id: UUID): Promise<Artist> {
-    const artist = await this.dataSource.getArtist(id);
+    const artist = await this.artistsRepository.findOne(id);
 
     if (!artist) {
       throw new NotFoundException();
