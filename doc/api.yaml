@@ -119,6 +119,13 @@ components:
             error: Bad Request
             message:
               - value must be a UUID
+    401:
+      description: Access token is missing or invalid
+      content:
+        application/json:
+          example:
+            statusCode: 401
+            message: Unauthorized
     404:
       description: Not Found
       content:
@@ -134,7 +141,88 @@ components:
             statusCode: 422
             message: Not Found
 
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
 paths:
+  /login:
+    post:
+      tags:
+        - Login
+      security: []
+      summary: Login
+      description: Logins a user and returns a JWT-token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  description: Username
+                password:
+                  type: string
+                  description: Password
+              required:
+                - user
+                - login
+      responses:
+        200:
+          description: Successful login.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                description: JWT Token
+        403:
+          description: Incorrect login or password
+  /signup:
+    post:
+      tags:
+        - Signup
+      security: [ ]
+      summary: Signup
+      description: Signup a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                login:
+                  type: string
+                  minLength: 3
+                  maxLength: 255
+                  description: Username
+                password:
+                  type: string
+                  format: password
+                  pattern: ^[a-zA-Z0-9]{3,30}
+                  description: Password
+              required:
+                - login
+                - password
+      responses:
+        204:
+          description: Successful signup
+        400:
+          description: Bad request
+        409:
+          description: Conflict. Login already exists
   /user:
     get:
       tags:
@@ -150,6 +238,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
+        401:
+          $ref: '#/components/responses/401'
     post:
       tags:
         - Users
@@ -191,6 +281,8 @@ paths:
                   - login should not be empty
                   - password must be a string
                   - password should not be empty
+        401:
+          $ref: '#/components/responses/401'
   /user/{id}:
     parameters:
       - name: id
@@ -213,6 +305,8 @@ paths:
                 $ref: '#/components/schemas/User'
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
 
@@ -264,6 +358,8 @@ paths:
                     example: 1655999999999
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         403:
           description: Forbidden
           content:
@@ -284,6 +380,8 @@ paths:
           description: The user has been deleted
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /track:
@@ -301,6 +399,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Track'
+        401:
+          $ref: '#/components/responses/401'
     post:
       tags:
         - Track
@@ -345,6 +445,8 @@ paths:
                   - name must be a string
                   - name should not be empty
                   - duration must be a number conforming to the specified constraints
+        401:
+          $ref: '#/components/responses/401'
   /track/{id}:
     parameters:
       - name: id
@@ -367,6 +469,8 @@ paths:
                 $ref: '#/components/schemas/Track'
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     put:
@@ -429,6 +533,8 @@ paths:
                     nullable: true
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     delete:
@@ -441,6 +547,8 @@ paths:
           description: Deleted successfully
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /album:
@@ -458,6 +566,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Album'
+        401:
+          $ref: '#/components/responses/401'
     post:
       tags:
         - Album
@@ -501,6 +611,8 @@ paths:
                   - name should not be empty
                   - year must be a number conforming to the specified constraints
                   - year should not be empty
+        401:
+          $ref: '#/components/responses/401'
   /album/{id}:
     parameters:
       - name: id
@@ -523,6 +635,8 @@ paths:
                 $ref: '#/components/schemas/Album'
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     put:
@@ -558,6 +672,8 @@ paths:
                 $ref: '#/components/schemas/Album'
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     delete:
@@ -570,6 +686,8 @@ paths:
           description: Deleted successfully
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /artist:
@@ -587,6 +705,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Artist'
+        401:
+          $ref: '#/components/responses/401'
     post:
       tags:
         - Artist
@@ -625,6 +745,8 @@ paths:
                   - name should not be empty
                   - grammy must be a boolean value
                   - grammy should not be empty
+        401:
+          $ref: '#/components/responses/401'
   /artist/{id}:
     parameters:
       - name: id
@@ -647,6 +769,8 @@ paths:
                 $ref: '#/components/schemas/Artist'
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     put:
@@ -677,6 +801,8 @@ paths:
                 $ref: '#/components/schemas/Artist'
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
     delete:
@@ -689,6 +815,8 @@ paths:
           description: Deleted successfully
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /favs:
@@ -704,6 +832,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Favorites'
+        401:
+          $ref: '#/components/responses/401'
   /favs/track/{id}:
     parameters:
       - name: id
@@ -722,6 +852,8 @@ paths:
           description: Added successfully
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         422:
           $ref: '#/components/responses/422'
     delete:
@@ -734,6 +866,8 @@ paths:
           description: Deleted successfully
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /favs/album/{id}:
@@ -754,6 +888,8 @@ paths:
           description: Added successfully
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         422:
           $ref: '#/components/responses/422'
     delete:
@@ -766,6 +902,8 @@ paths:
           description: Deleted successfully
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
   /favs/artist/{id}:
@@ -786,6 +924,8 @@ paths:
           description: Added successfully
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         422:
           $ref: '#/components/responses/422'
     delete:
@@ -798,5 +938,7 @@ paths:
           description: Deleted successfully
         400:
           $ref: '#/components/responses/400'
+        401:
+          $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'

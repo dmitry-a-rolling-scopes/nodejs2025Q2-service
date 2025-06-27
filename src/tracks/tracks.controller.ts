@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { TracksProvider } from './tracks.provider';
 import { UUID } from '../common/uuid.dto';
@@ -16,8 +17,10 @@ import { Track as TrackInterface } from './track.interface';
 import { TrackDto } from './track.dto';
 import { TracksMapper } from './tracks.mapper';
 import { Track } from './track.entity';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('track')
+@UseGuards(AuthGuard)
 export class TracksController {
   constructor(
     private readonly tracksMapper: TracksMapper,

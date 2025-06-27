@@ -1,13 +1,20 @@
 services:
     node:
-        image: dmitryarollingscopes/nodejs2025q2-service:dev
+        image: dmitryarollingscopes/nodejs2025q2-service:release
         environment:
+            CRYPT_SALT: ${CRYPT_SALT}
+            JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+            JWT_SECRET_REFRESH_KEY: ${JWT_SECRET_REFRESH_KEY}
+            LOG_FILE_SIZE: ${LOG_FILE_SIZE}
+            LOG_LEVEL: ${LOG_LEVEL}
             PORT: ${PORT}
             POSTGRES_HOST: ${POSTGRES_HOST}
             POSTGRES_PORT: ${POSTGRES_PORT}
             POSTGRES_DB: ${POSTGRES_DB}
             POSTGRES_USERNAME: ${POSTGRES_USERNAME}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            TOKEN_EXPIRE_TIME: ${TOKEN_EXPIRE_TIME}
+            TOKEN_REFRESH_EXPIRE_TIME: ${TOKEN_REFRESH_EXPIRE_TIME}
         networks:
             - rolling-scopes
         ports:
@@ -16,6 +23,7 @@ services:
         depends_on:
             - postgres
         volumes:
+            - ./logs:/srv/app/logs
             - ./src:/srv/app/src
 
     postgres:

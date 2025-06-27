@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ArtistsProvider } from './artists.provider';
 import { UUID } from '../common/uuid.dto';
@@ -16,8 +17,10 @@ import { ArtistsProcessor } from './artists.processor';
 import { ArtistDto } from './artist.dto';
 import { ArtistsMapper } from './artists.mapper';
 import { Artist } from './artist.entity';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('artist')
+@UseGuards(AuthGuard)
 export class ArtistsController {
   constructor(
     private readonly artistsMapper: ArtistsMapper,

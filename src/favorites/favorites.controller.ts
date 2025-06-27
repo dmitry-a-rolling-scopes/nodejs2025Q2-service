@@ -6,14 +6,17 @@ import {
   HttpStatus,
   Param,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { UUID } from '../common/uuid.dto';
 import { FavoritesProcessor } from './favorites.processor';
 import { FavoritesProvider } from './favorites.provider';
 import { FavoritesResponse } from './favorites.response.dto';
 import { FavoritesMapper } from './favorites.mapper';
+import { AuthGuard } from '../auth/auth.guard';
 
 @Controller('favs')
+@UseGuards(AuthGuard)
 export class FavoritesController {
   constructor(
     private readonly favoritesMapper: FavoritesMapper,
